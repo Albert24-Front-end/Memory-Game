@@ -1,0 +1,27 @@
+# Node modules and dependency files
+/node_modules/
+/package-lock.json
+/yarn.lock
+
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+# Environment files
+/.env
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
+
+.eslintcache
