@@ -13,7 +13,7 @@ const matches = computed(() => matchedCards.value.size / 2);
 const gameId = ref(0);
 const isGameWon = computed(() => matches.value === totalPairs);
 
-function resetGame() {
+function resetGame(timeout: number) {
   gameId.value += 1;
   moves.value = 0;
   matchedCards.value.clear();
@@ -21,7 +21,11 @@ function resetGame() {
 
   setTimeout(() => {
     cards.value = shuffleCards([...symbols, ...symbols]);
-  }, 300);
+  }, timeout);
+}
+
+function showHint(index: number, image: string) {
+  alert(`This card has index №${index} and image ${image}`)
 }
 
 function openCard(index: number) {
@@ -66,7 +70,7 @@ watch(hasTwoCardsOpened, (areTwoCardsOpened) => {
   }
 });
 
-resetGame();
+resetGame(500);
 </script>
 
 <template>
@@ -87,10 +91,11 @@ resetGame();
         :status="getStatus(index)"
         :disabled="hasTwoCardsOpened"
         @click="openCard(index)"
+        @hint="showHint(index, $event)"
       />
     </div>
 
-    <button @click="resetGame">New Game</button>
+    <form action="#"><button @click.prevent="resetGame(500)">New Game</button></form>
 
     <div v-if="isGameWon" class="win-message">Congratulations! You won in {{ moves }} moves!</div>
   </div>

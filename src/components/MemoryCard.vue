@@ -1,23 +1,33 @@
 <script setup lang="ts">
-defineProps<{
-    image: string,
-    name: string,
-    status: 'closed' | 'opened' | 'matched',
-    disabled?: boolean
-}>()
+const props = defineProps<{
+  image: string;
+  name: string;
+  status: 'closed' | 'opened' | 'matched';
+  disabled?: boolean;
+}>();
+
+const emit = defineEmits<{
+  hint: [image: string];
+}>();
+
+function handleHint() {
+  emit('hint', props.image);
+}
 </script>
 
 <template>
   <div
     class="card"
     :class="{
-        flipped: status === 'opened' || status === 'matched',
-        matched: status === 'matched',
-        disabled
+      flipped: status === 'opened' || status === 'matched',
+      matched: status === 'matched',
+      disabled,
     }"
   >
     <div class="card-inner">
-      <div class="card-face card-back"></div>
+      <div class="card-face card-back">
+        <div class="question-mark" @click.stop="handleHint">?</div>
+      </div>
       <div class="card-face card-front">
         <img :src="image" :alt="name" />
       </div>
@@ -80,5 +90,19 @@ defineProps<{
 
 .card.disabled {
   pointer-events: none;
+}
+
+.card .question-mark {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1px solid black;
+  cursor: wait;
 }
 </style>
