@@ -3,8 +3,19 @@ import { computed, watch, ref } from 'vue';
 import { symbols } from './symbols';
 import { shuffleCards } from './shuffleCards';
 import MemoryCard from './components/MemoryCard.vue';
+import BaseModal from './components/BaseModal.vue';
 
-const cards = ref([]);
+interface ModalData {
+  index: number,
+  image: string,
+}
+
+interface Card {
+  name: string,
+  image: string
+}
+
+const cards = ref<Card[]>([]);
 const moves = ref(0);
 const totalPairs = symbols.length;
 const matchedCards = ref(new Set<number>());
@@ -12,6 +23,8 @@ const openedCards = ref(new Set<number>());
 const matches = computed(() => matchedCards.value.size / 2);
 const gameId = ref(0);
 const isGameWon = computed(() => matches.value === totalPairs);
+const isModalOpen = ref(false);
+const modalData = ref<ModalData | null>(null);
 
 function resetGame(timeout: number) {
   gameId.value += 1;
@@ -25,7 +38,13 @@ function resetGame(timeout: number) {
 }
 
 function showHint(index: number, image: string) {
-  alert(`This card has index №${index} and image ${image}`)
+  isModalOpen.value = true;
+  modalData.value = { index, image }
+  if(!isModalOpen.value) {
+    return modalData.value = null;
+  }
+
+  return modalData;
 }
 
 function openCard(index: number) {
@@ -92,7 +111,14 @@ resetGame(500);
         :disabled="hasTwoCardsOpened"
         @click="openCard(index)"
         @hint="showHint(index, $event)"
-      />
+      >
+      </MemoryCard>
+      <BaseModal :show="isModalOpen" @close="isModalOpen = false" :data="modalData">
+        <h2 class="modal-header">This card has index {{ modalData?.index }}</h2>
+        <div class="modal-image-wrapper">
+          <img :src="modalData?.image" :alt="modalData?.index.toString()">
+        </div>
+      </BaseModal>
     </div>
 
     <form action="#"><button @click.prevent="resetGame(500)">New Game</button></form>
@@ -170,6 +196,19 @@ button:hover {
   font-size: 1.5rem;
   color: #27ae60;
   font-weight: bold;
+}
+
+.modal-header {
+  margin-top: 20px;
+}
+
+.modal-image-wrapper {
+  margin-top: 20px;
+}
+
+.modal-image-wrapper img {
+  width: 100%;
+  height: 100%;
 }
 
 @media (max-width: 600px) {
