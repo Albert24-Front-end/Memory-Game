@@ -25,6 +25,7 @@ const gameId = ref(0);
 const isGameWon = computed(() => matches.value === totalPairs);
 const isModalOpen = ref(false);
 const modalData = ref<ModalData | null>(null);
+const clickModalCount = ref(new Map<number, number>());
 
 function resetGame(timeout: number) {
   gameId.value += 1;
@@ -38,6 +39,10 @@ function resetGame(timeout: number) {
 }
 
 function showHint(index: number, image: string) {
+  const currentCount = clickModalCount.value.get(index) ?? 0;
+  if (currentCount >= 2) return;
+  clickModalCount.value.set(index, currentCount + 1);
+
   isModalOpen.value = true;
   modalData.value = { index, image }
   if(!isModalOpen.value) {
