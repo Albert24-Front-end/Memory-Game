@@ -121,7 +121,7 @@ resetGame(500);
       >
       </MemoryCard>
       <BaseModal :show="isModalOpen" @close="isModalOpen = false" :data="modalData">
-        <h2 class="modal-header">This card with index {{ modalData?.index }} hides <div style="text-align: center; margin-top: 5px;">{{ modalData?.name }}</div></h2>
+        <h2 class="modal-header">This card with index {{ modalData?.index }} hides <div class="modal-fruit-name">{{ modalData?.name }}</div></h2>
         <div class="modal-image-wrapper">
           <img :src="modalData?.image" :alt="modalData?.index.toString()">
         </div>
@@ -216,6 +216,12 @@ button:hover {
 .modal-image-wrapper img {
   width: 100%;
   height: 100%;
+}
+
+.modal-fruit-name {
+  display: block;
+  text-align: center;
+  margin-top: 5px;
 }
 
 @media (max-width: 600px) {
