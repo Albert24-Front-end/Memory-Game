@@ -8,6 +8,7 @@ import BaseModal from './components/BaseModal.vue';
 interface ModalData {
   index: number,
   image: string,
+  name?: string
 }
 
 interface Card {
@@ -44,7 +45,8 @@ function showHint(index: number, image: string) {
   clickModalCount.value.set(index, currentCount + 1);
 
   isModalOpen.value = true;
-  modalData.value = { index, image }
+  modalData.value = { index, image };
+  modalData.value.name = cards.value[index].name;
   if(!isModalOpen.value) {
     return modalData.value = null;
   }
@@ -119,7 +121,7 @@ resetGame(500);
       >
       </MemoryCard>
       <BaseModal :show="isModalOpen" @close="isModalOpen = false" :data="modalData">
-        <h2 class="modal-header">This card has index {{ modalData?.index }}</h2>
+        <h2 class="modal-header">This card with index {{ modalData?.index }} hides <div style="text-align: center; margin-top: 5px;">{{ modalData?.name }}</div></h2>
         <div class="modal-image-wrapper">
           <img :src="modalData?.image" :alt="modalData?.index.toString()">
         </div>
