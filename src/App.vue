@@ -33,6 +33,7 @@ function resetGame(timeout: number) {
   moves.value = 0;
   matchedCards.value.clear();
   openedCards.value.clear();
+  clickModalCount.value.clear();
 
   setTimeout(() => {
     cards.value = shuffleCards([...symbols, ...symbols]);
